@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ClassworkActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/classwork_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/teal_200"
+        android:titleTextColor="@color/black"
+        app:title=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classwork_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/comment_layout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/classwork_details_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/due_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Due Date"
+                    android:layout_marginStart="5dp"
+                    android:padding="1dp"
+                    android:textColor="@color/light_black"/>
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/assignment_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:layout_marginStart="5dp"
+                    android:padding="1dp"
+                    android:text="Assignment Title"
+                    android:textColor="@color/cream_blue"/>
+
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Points"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:padding="1dp"
+                    android:textColor="@color/light_black"/>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:dividerColor="@color/black"/>
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/RandomData"
+                    android:layout_margin="5dp"
+                    android:padding="1dp"
+                    android:textColor="@color/light_black"/>
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/attachments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attachments"
+                    android:layout_marginStart="5dp"
+                    android:padding="1dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/classwork_attachments_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/classwork_details_layout"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/comment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:dividerColor="@color/grey"/>
+
+        <LinearLayout
+            android:id="@+id/classwork_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:padding="5dp"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/comment"
+                android:layout_marginStart="15dp"
+                app:tint="@color/light_black"
+                android:scaleType="fitXY"/>
+
+            <TextView
+                android:id="@+id/classwork_no_of_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 class comments"
+                android:textColor="@color/light_black"
+                android:layout_marginStart="10dp"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Smart Classroom</string>
+    <string name="Home">Home</string>
+    <string name="Logout">Logout</string>
+    <string name="Profile">Profile</string>
+    <string name="Refresh">Refresh</string>
+    <string name="Classes">Classes</string>
+    <string name="Notifications">Notifications</string>
+    <string name="Teaching">Teaching</string>
+    <string name="TeachingClass1">Teaching Class 1</string>
+    <string name="Enrolled">Enrolled</string>
+    <string name="Todo">To do</string>
+    <string name="Settings">Settings</string>
+    <string name="Section">Section</string>
+    <string name="ClassName">Class Name</string>
+    <string name="Subject">Subject</string>
+    <string name="Name">Name</string>
+    <string name="CreateClass">Create class</string>
+    <string name="JoinClass">Join class</string>
+    <string name="Create">Create</string>
+    <string name="Join">Join</string>
+    <string name="NotificationDesc">Notification you receive will appear here.</string>
+    <string name="Assigned">Assigned</string>
+    <string name="Missing">Missing</string>
+    <string name="Done">Done</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Stream">Stream</string>
+    <string name="Classwork">Classwork</string>
+    <string name="People">People</string>
+    <string name="ShareWithYourClass">Share with your class ...</string>
+    <string name="AddClassComment">Add class comment</string>
+    <string name="UserName">User Name</string>
+    <string name="DefaultDate">1 Jan 2022</string>
+    <string name="Attachment">attachment</string>
+    <string name="RandomData">Lorem\n Ipsum\n is\n simply\n dummy\n text\n of\n the\n printing\n and\n typesetting\n industry.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Lorem\n Ipsum\n has\n been\n the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="Post">Post</string>
+    <string name="Login">Login</string>
+    <string name="EmailAddress">Email Address</string>
+    <string name="Password">Password</string>
+    <string name="ForgotPassword">Forgot Password</string>
+    <string name="Continue">CONTINUE</string>
+    <string name="Or">or</string>
+    <string name="NewHere">New here?</string>
+    <string name="Register">Register</string>
+    <string name="BeenHereBefore">Been here before</string>
+</resources>

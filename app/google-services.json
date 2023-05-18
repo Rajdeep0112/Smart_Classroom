@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "194469242200",
+    "firebase_url": "https://smart-classroom-b93cc-default-rtdb.firebaseio.com",
+    "project_id": "smart-classroom-b93cc",
+    "storage_bucket": "smart-classroom-b93cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194469242200:android:b755e6280fe2a13ceab12d",
+        "android_client_info": {
+          "package_name": "com.example.smartclassroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "194469242200-9e6lo79v5rihqig40590rs37o8j50apk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABAaGIvQiTI5eBn8NOELhlPGqgOMptlS0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "194469242200-9e6lo79v5rihqig40590rs37o8j50apk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
