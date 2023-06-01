@@ -83,7 +83,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/attachments"
                 tools:itemCount="20"
-                tools:listitem="@layout/selected_aattachment_item_view" />
+                tools:listitem="@layout/selected_attachment_item_view" />
 
 
         </LinearLayout>

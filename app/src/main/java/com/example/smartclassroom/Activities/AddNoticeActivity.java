@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -148,20 +149,4 @@ public class AddNoticeActivity extends AppCompatActivity{
         }
         return result;
     }
-
-//    private void uploadFile(){
-//        for(NewFileModel model : fileList){
-//            if(model.getFileType()!=null) {
-//                ContentResolver cR = getContentResolver();
-//                MimeTypeMap mime = MimeTypeMap.getSingleton();
-//                String fileExtension = mime.getExtensionFromMimeType(cR.getType(Uri.parse(model.getFilepath())));
-//                StorageReference reference = storageReference.child("image/" + System.currentTimeMillis()/*model.getFileName() */+ "." + fileExtension);
-//                reference.putFile(Uri.parse(model.getFilepath()))
-//                        .addOnSuccessListener(taskSnapshot -> {
-//                            Toast.makeText(this,"File uploaded",Toast.LENGTH_SHORT).show();
-//                        });
-//            }
-//        }
-//    }
-
 }

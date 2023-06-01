@@ -1,5 +1,7 @@
 package com.example.smartclassroom.Adapters;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -25,6 +27,7 @@ public class TodoVpAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        sendClassDetails(fragments.get(position),position);
         return fragments.get(position);
     }
 
@@ -46,5 +49,11 @@ public class TodoVpAdapter extends FragmentStateAdapter {
 
     public String getHeader(int position){
         return headers.get(position);
+    }
+
+    private void sendClassDetails(Fragment fragment,int position){
+        Bundle bundle=new Bundle();
+        bundle.putString("Tag",headers.get(position));
+        fragment.setArguments(bundle);
     }
 }

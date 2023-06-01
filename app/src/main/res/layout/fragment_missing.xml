@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.Todo.MissingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/todo_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:listitem="@layout/todo_item_layout"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

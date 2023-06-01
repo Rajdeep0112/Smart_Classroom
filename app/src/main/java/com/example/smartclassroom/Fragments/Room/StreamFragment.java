@@ -2,7 +2,9 @@ package com.example.smartclassroom.Fragments.Room;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,9 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.smartclassroom.Activities.AddNoticeActivity;
 import com.example.smartclassroom.Activities.ClassworkActivity;
 import com.example.smartclassroom.Activities.NoticeActivity;
@@ -32,23 +36,21 @@ import com.example.smartclassroom.Adapters.NoticeViewAdapter;
 import com.example.smartclassroom.Models.CommentDetailsModel;
 import com.example.smartclassroom.Models.NewClassroomModel;
 import com.example.smartclassroom.Models.NewFileModel;
-import com.example.smartclassroom.Models.NewNoticeModel;
+import com.example.smartclassroom.Models.NewStreamModel;
 import com.example.smartclassroom.Models.UploadFileModel;
 import com.example.smartclassroom.R;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -56,14 +58,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class StreamFragment extends Fragment{
+public class StreamFragment extends Fragment {
 
     private String NoticeId;
     private TextView className, section;
     private CardView addNotice;
     private ImageButton noticeMore;
+    private ImageView profileImg;
     private RecyclerView recyclerView;
-    private ArrayList<NewNoticeModel> noticeList = new ArrayList<>();
+    private ArrayList<NewStreamModel> streamList = new ArrayList<>();
     private CommentDetailsModel detailsModel;
     private NewClassroomModel classroomModel;
     private NoticeViewAdapter adapter;
@@ -71,7 +74,7 @@ public class StreamFragment extends Fragment{
     private DocumentReference user, room;
     private CollectionReference streams, allStreams;
     private View view;
-    private String UserName,Email,UserID;
+    private String UserName, Email, UserID;
     private ArrayList<NewFileModel> fileList = new ArrayList<>();
     private Uri uri;
     private StorageReference storageReference;
@@ -95,14 +98,15 @@ public class StreamFragment extends Fragment{
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             classroomModel = (NewClassroomModel) bundle.getSerializable("ClassroomModel");
-            UserID=bundle.getString("UserId");
-            Email=bundle.getString("Email");
-            UserName=bundle.getString("UserName");
+            UserID = bundle.getString("UserId");
+            Email = bundle.getString("Email");
+            UserName = bundle.getString("UserName");
             firebaseInitialisation();
         }
 
         className.setText(classroomModel.getClassroomName());
         section.setText(classroomModel.getSection());
+        setUserProfile(UserID,profileImg,getContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -127,6 +131,7 @@ public class StreamFragment extends Fragment{
         noticeMore = view.findViewById(R.id.noticeMore);
         recyclerView = view.findViewById(R.id.noticeView);
         addNotice = view.findViewById(R.id.addNotices);
+        profileImg =view.findViewById(R.id.shareImageView);
     }
 
     private void firebaseInitialisation() {
@@ -141,45 +146,95 @@ public class StreamFragment extends Fragment{
     }
 
     private void adapterWork(View view, NoticeViewAdapter adapter) {
-        detailsModel = new CommentDetailsModel(classroomModel.getClassId(),UserID,UserName,Email);
-        adapter.setNotices(noticeList, detailsModel, view.getContext());
+        detailsModel = new CommentDetailsModel(classroomModel.getClassId(), UserID, UserName, Email);
+        adapter.setNotices(streamList, detailsModel, view.getContext());
         adapter.setOnItemClickListener(new NoticeViewAdapter.onItemClickListener() {
             @Override
-            public void onItemClick(NewNoticeModel newNoticeModel) {
-                int position = noticeList.indexOf(newNoticeModel);
-                if (noticeList.get(position).getNoticeId() != null) {
-                    detailsModel = new CommentDetailsModel(classroomModel.getClassId(),noticeList.get(position).getNoticeId(),UserID,UserName,Email);
-                    Intent intent = new Intent(getContext(), NoticeActivity.class);
-                    passData(classroomModel, noticeList.get(position), detailsModel, intent);
-                } else {
-                    detailsModel = new CommentDetailsModel(classroomModel.getClassId(),noticeList.get(position).getAssignmentId(),UserID,UserName,Email);
-                    Intent intent = new Intent(getContext(), ClassworkActivity.class);
-                    passData(classroomModel, noticeList.get(position), detailsModel, intent);
+            public void onItemClick(int position) {
+                if(streamList.size()>position) {
+                    if (streamList.get(position).getNoticeId() != null) {
+                        detailsModel = new CommentDetailsModel(classroomModel.getClassId(), streamList.get(position).getNoticeId(), UserID, UserName, Email);
+                        Intent intent = new Intent(getContext(), NoticeActivity.class);
+                        passData(classroomModel, streamList.get(position), detailsModel, intent);
+                    } else {
+                        detailsModel = new CommentDetailsModel(classroomModel.getClassId(), streamList.get(position).getAssignmentId(), UserID, UserName, Email);
+                        Intent intent = new Intent(getContext(), ClassworkActivity.class);
+                        passData(classroomModel, streamList.get(position), detailsModel, intent);
+                    }
                 }
             }
         });
     }
 
-    private void passData(NewClassroomModel newClassroomModel,NewNoticeModel model, CommentDetailsModel detailsModel, Intent intent){
-        Bundle data=new Bundle();
-        data.putString("Source","stream");
-        data.putSerializable("DetailsModel", (Serializable) detailsModel);
-        data.putSerializable("ClassroomModel",newClassroomModel);
-        data.putSerializable("Model",model);
-        intent.putExtra("data",data);
+    private void passData(NewClassroomModel newClassroomModel, NewStreamModel model, CommentDetailsModel detailsModel, Intent intent) {
+        Bundle data = new Bundle();
+        data.putString("Source", "stream");
+        data.putSerializable("DetailsModel", detailsModel);
+        data.putSerializable("ClassroomModel", newClassroomModel);
+        data.putSerializable("Model", model);
+        intent.putExtra("data", data);
         startActivity(intent);
     }
 
     private void extractData(View view) {
-        noticeList = new ArrayList<>();
+        streamList = new ArrayList<>();
         allStreams.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                noticeList = (ArrayList<NewNoticeModel>) task.getResult().toObjects(NewNoticeModel.class);
+                streamList = (ArrayList<NewStreamModel>) task.getResult().toObjects(NewStreamModel.class);
                 adapterWork(view, adapter);
             }
         }).addOnFailureListener(e -> {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         });
+    }
+
+    public static boolean isValidContextForGlide(final Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            if (activity.isDestroyed() || activity.isFinishing()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void setUserProfile(String userId, ImageView imageView, Context context) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference();
+        DatabaseReference profile = reference.child("Profiles").child(userId);
+        profile.child("profileUrl").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    String url = snapshot.getValue().toString();
+                    setProfileImg(url, imageView, context);
+
+                } else {
+                    String url = "";
+                    setProfileImg(url, imageView, context);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void setProfileImg(String url, ImageView imageView, Context context) {
+        if (url.equals("")) {
+            imageView.setImageResource(R.drawable.default_profile);
+        } else {
+            if(context!=null) {
+                if (isValidContextForGlide(context)) {
+                    Glide.with(context).load(url).into(imageView);
+                }
+            }
+        }
     }
 
     public void registerActivityForCreateNotice() {
@@ -200,46 +255,32 @@ public class StreamFragment extends Fragment{
                             String Timestamp = Date + " " + Time;
                             String NoticeId = streams.document().getId();
 
-                            user.get().addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot snapshot = task.getResult();
-                                    String UserName = snapshot.getString("userName");
-                                    NewNoticeModel newNoticeModel = new NewNoticeModel(NoticeId,NoticeShare,classroomModel.getClassId(),UserName,Timestamp,Date,Time,fileList.size());
+                            NewStreamModel newStreamModel = new NewStreamModel(NoticeId, NoticeShare, classroomModel.getClassId(), UserID, UserName, Timestamp, Date, Time, fileList.size(),0);
 
-                                    allStreams.document(NoticeId).set(newNoticeModel).addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()) {
-                                            streams.document(NoticeId).set(newNoticeModel).addOnCompleteListener(task2 -> {
-                                                if (task2.isSuccessful()) {
-                                                    extractData(view);
-                                                    if(getContext()!=null) {
-                                                        Toast.makeText(getContext(), "Notice posted", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } else {
-                                                    Toast.makeText(getContext(), task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }).addOnFailureListener(e -> {
-                                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            });
-                                        }
-                                    }).addOnFailureListener(e -> {
-                                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
+                            allStreams.document(NoticeId).set(newStreamModel).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    extractData(view);
+                                    if (getContext() != null) {
+                                        Toast.makeText(getContext(), "Notice posted", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(e -> {
                                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
 
-                            uploadFile(classroomModel.getClassId(),NoticeId);
+                            uploadFile(classroomModel.getClassId(), NoticeId);
                         }
                     }
                 });
     }
 
-    private void uploadFile(String ClassId,String NoticeId){
+    private void uploadFile(String ClassId, String NoticeId) {
         documents = reference.child("Attachments").child(ClassId).child(NoticeId);
-        for(NewFileModel model : fileList){
-            if(model.getFileType()!=null) {
-                StorageReference reference = storageReference.child(ClassId+"/"+NoticeId+"/"+System.currentTimeMillis()+"."+getFileExtension(Uri.parse(model.getFilepath())));
+        for (NewFileModel model : fileList) {
+            if (model.getFileType() != null) {
+                StorageReference reference = storageReference.child("Classrooms/"+ClassId + "/" + NoticeId + "/" + System.currentTimeMillis() + "." + getFileExtension(Uri.parse(model.getFilepath())));
                 reference.putFile(Uri.parse(model.getFilepath()))
                         .continueWithTask(task -> {
                             if (!task.isSuccessful()) {
@@ -247,10 +288,12 @@ public class StreamFragment extends Fragment{
                             }
                             return reference.getDownloadUrl();
                         }).addOnCompleteListener(task -> {
-                            if(task.isSuccessful()){
-                                Toast.makeText(getContext(),"File uploaded",Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
+                                if(getContext()!=null) {
+                                    Toast.makeText(getContext(), "File uploaded", Toast.LENGTH_SHORT).show();
+                                }
                                 Uri url = task.getResult();
-                                UploadFileModel fileModel = new UploadFileModel(model.getFileName(),url.toString());
+                                UploadFileModel fileModel = new UploadFileModel(model.getFileName(), url.toString());
                                 String id = documents.push().getKey();
                                 documents.child(id).setValue(fileModel);
                             }
@@ -259,7 +302,7 @@ public class StreamFragment extends Fragment{
         }
     }
 
-    private String getFileExtension(Uri uri){
+    private String getFileExtension(Uri uri) {
         ContentResolver cR = getContext().getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));

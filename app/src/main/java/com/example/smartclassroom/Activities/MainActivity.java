@@ -12,8 +12,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,20 +27,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.smartclassroom.Adapters.ClassroomAdapter;
+import com.example.smartclassroom.Classes.CommonFuncClass;
 import com.example.smartclassroom.Classes.addClassAlert;
 import com.example.smartclassroom.Models.NewClassroomModel;
+import com.example.smartclassroom.Models.NewPeopleModel;
 import com.example.smartclassroom.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -61,13 +71,15 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
     private ArrayList<String> sc=new ArrayList<>();
     private ClassroomAdapter adapter;
     private ImageButton moreOption;
+    private ImageView accountProfile;
     public int checkId=1;
-    private FirebaseDatabase database;
     private FirebaseAuth auth;
     private String UserName,Email,UserID,ClassId;
+    final String[] url = {""};
     private CollectionReference classrooms;
     private DocumentReference user,room,classwork,stream,people,todo;
     private CollectionReference allClassrooms;
+    private CommonFuncClass cfc;
 
     ActivityResultLauncher<Intent> activityResultLauncherForCreateClass;
     ActivityResultLauncher<Intent> activityResultLauncherForJoinClass;
@@ -83,13 +95,14 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cfc = new CommonFuncClass(this);
         registerActivityForCreateClass();
         registerActivityForJoinClass();
         initialisations();
         setSupportActionBar(mainToolbar);
         configureToolbar();
 
-        extractUser(mainNavigationView,user);
+        extractUser(mainNavigationView,user,this);
         navigationViewMenu(mainNavigationView,classroomList);
         navigationViewController(mainNavigationView, mainDrawerLayout, classroomList, MainActivity.this,auth);
 
@@ -110,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.home_toolbar_menu,menu);
         menu.removeItem(R.id.profile);
+        menu.removeItem(R.id.edit);
         return true;
     }
 
@@ -120,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
         fab=findViewById(R.id.main_fab);
         recyclerView=findViewById(R.id.main_recycler_view);
         moreOption=findViewById(R.id.more_option);
-        database=FirebaseDatabase.getInstance();
+        accountProfile = findViewById(R.id.account_profile);
         auth=FirebaseAuth.getInstance();
         UserID=auth.getCurrentUser().getUid();
         user= FirebaseFirestore.getInstance().collection("Users").document(UserID);
@@ -148,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
                 extractClassrooms();
             }
         }).addOnFailureListener(e -> {
-            Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            cfc.toastShort(e.getMessage());
         });
 
     }
@@ -182,15 +196,62 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
         });
     }
 
-    public void extractUser(NavigationView navigationView,DocumentReference user){
+    public static boolean isValidContextForGlide(final Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            if (activity.isDestroyed() || activity.isFinishing()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void extractUser(NavigationView navigationView,DocumentReference user,Context context){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference();
         user.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot snapshot = task.getResult();
                 UserName = snapshot.getString("userName");
                 Email = snapshot.getString("email");
-                getHeaderView(navigationView,UserName,Email);
+                DatabaseReference profile = reference.child("Profiles").child(snapshot.getId());
+                profile.child("profileUrl").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.getValue()!=null) {
+                            url[0] = snapshot.getValue().toString();
+                            getHeaderView(navigationView,UserName,Email,url[0],context);
+                            if(context==MainActivity.this) setProfileImg(url[0],accountProfile,context);
+
+                        }else {
+                            url[0] = "";
+                            getHeaderView(navigationView,UserName,Email,url[0],context);
+                            if(context==MainActivity.this) setProfileImg(url[0],accountProfile,context);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
+    }
+
+    public void setProfileImg(String url, ImageView imageView,Context context){
+        if(url.equals("")){
+            imageView.setImageResource(R.drawable.default_profile);
+        }else {
+            if(context!=null) {
+                if (isValidContextForGlide(context)) {
+                    Glide.with(context).load(url).into(imageView);
+                }
+            }
+        }
     }
 
     private void configureToolbar(){
@@ -209,15 +270,17 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
         othersMenu(menu,30);
     }
 
-    public void getHeaderView(NavigationView navigationView,String UserName,String Email){
+    public void getHeaderView(NavigationView navigationView,String UserName,String Email,String url,Context context){
         View view = navigationView.getHeaderView(0);
         ImageView profile = view.findViewById(R.id.user_profile);
         TextView userName = view.findViewById(R.id.user_name);
         TextView email = view.findViewById(R.id.user_email);
+        setProfileImg(url,profile,context);
         userName.setText(UserName);
         email.setText(Email);
-        userName.setVisibility(View.VISIBLE);
-        email.setVisibility(View.VISIBLE);
+        profile.setOnClickListener(view1 -> {
+            context.startActivity(new Intent(context,ProfileImageActivity.class));
+        });
     }
 
     public void navigationViewController(NavigationView navigationView, DrawerLayout drawerLayout, ArrayList<NewClassroomModel> classroomList, Context context, FirebaseAuth auth){
@@ -252,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
             if(item.getItemId()==42){
                 auth.signOut();
                 Intent intent = new Intent(context,LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(intent);
                 Toast.makeText(context, "Logout", Toast.LENGTH_SHORT).show();
             }
@@ -374,11 +437,6 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
 
                             ClassId = classrooms.document().getId();
 
-                            HashMap<String,Object> map1 = new HashMap<>();
-                            map1.put("userName",UserName);
-                            map1.put("email",Email);
-                            map1.put("timestamp",Timestamp);
-
                             AtomicLong key = new AtomicLong();
                             allClassrooms.get().addOnCompleteListener(task -> {
                                 key.set(task.getResult().size());
@@ -407,15 +465,12 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
 
                             NewClassroomModel newClassroomModel=new NewClassroomModel(model.getClassroomName(),model.getSection(),model.getClassId(),model.getUserId(),model.getUserName(),model.getOccupation(),model.getNoOfStudents()+1,model.getKey(),Timestamp);
 
-                            HashMap<String,Object> map1 = new HashMap<>();
-                            map1.put("userName",UserName);
-                            map1.put("email",Email);
-                            map1.put("timestamp",Timestamp);
+                            NewPeopleModel newPeopleModel = new NewPeopleModel(UserID,UserName,Email,Timestamp);
 
                             allClassrooms.document(model.getClassId())
                                     .collection("Students")
                                     .document(UserID)
-                                    .set(map1)
+                                    .set(newPeopleModel)
                                     .addOnCompleteListener(task -> {
                                         if(task.isSuccessful()){
                                             classrooms.document(model.getClassId()).set(newClassroomModel).addOnCompleteListener(task1 -> {
@@ -453,14 +508,11 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
             if(task.isSuccessful()) {
                 classrooms.document(ClassId).set(newClassroomModel).addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
-                        HashMap<String,Object> map1 = new HashMap<>();
-                        map1.put("userName",UserName);
-                        map1.put("email",Email);
-                        map1.put("timestamp",Timestamp);
+                        NewPeopleModel newPeopleModel = new NewPeopleModel(UserID,UserName,Email,Timestamp);
                         allClassrooms.document(ClassId)
                                 .collection("Teachers")
                                 .document(UserID)
-                                .set(map1)
+                                .set(newPeopleModel)
                                 .addOnCompleteListener(task2 -> {
                                     if(task2.isSuccessful()){
                                         extractClassrooms();

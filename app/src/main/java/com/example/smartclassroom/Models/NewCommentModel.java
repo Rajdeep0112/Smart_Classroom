@@ -1,6 +1,8 @@
 package com.example.smartclassroom.Models;
 
-public class NewCommentModel {
+import java.io.Serializable;
+
+public class NewCommentModel implements Serializable {
 
     String messageId,message,fromId,fromUserName,fromEmail,date,time,timestamp;
 

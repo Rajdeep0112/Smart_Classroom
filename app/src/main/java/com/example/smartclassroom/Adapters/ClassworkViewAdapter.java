@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartclassroom.Models.NewAssignmentModel;
+import com.example.smartclassroom.Models.NewStreamModel;
 import com.example.smartclassroom.R;
 
 import java.util.ArrayList;
@@ -20,11 +20,11 @@ import java.util.ArrayList;
 public class ClassworkViewAdapter extends RecyclerView.Adapter<ClassworkViewAdapter.ClassworkViewHolder> {
 
     private Context context;
-    private ArrayList<NewAssignmentModel> assignmentModel=new ArrayList<>();
+    private ArrayList<NewStreamModel> classworkModel=new ArrayList<>();
     private onItemClickListener listener;
 
-    public void setAssignments(ArrayList<NewAssignmentModel> assignmentModel,Context context){
-        this.assignmentModel=assignmentModel;
+    public void setAssignments(ArrayList<NewStreamModel> classworkModel,Context context){
+        this.classworkModel=classworkModel;
         this.context=context;
         notifyDataSetChanged();
     }
@@ -38,17 +38,17 @@ public class ClassworkViewAdapter extends RecyclerView.Adapter<ClassworkViewAdap
 
     @Override
     public void onBindViewHolder(@NonNull ClassworkViewHolder holder, int position) {
-        NewAssignmentModel model=assignmentModel.get(position);
+        NewStreamModel model=classworkModel.get(position);
         holder.title.setText(model.getTitle());
         holder.time.setText("Posted "+model.getTime());
     }
 
     @Override
     public int getItemCount() {
-        return assignmentModel.size();
+        return classworkModel.size();
     }
 
-    public NewAssignmentModel getAssignment(int position){return assignmentModel.get(position);}
+    public NewStreamModel getAssignment(int position){return classworkModel.get(position);}
 
     public class ClassworkViewHolder extends RecyclerView.ViewHolder{
 
@@ -68,14 +68,14 @@ public class ClassworkViewAdapter extends RecyclerView.Adapter<ClassworkViewAdap
             itemView.setOnClickListener(view -> {
                 int position=getAdapterPosition();
                 if(listener!=null && position!=RecyclerView.NO_POSITION){
-                    listener.onItemClick(assignmentModel.get(position));
+                    listener.onItemClick(position);
                 }
             });
         }
     }
 
     public interface onItemClickListener{
-        void onItemClick(NewAssignmentModel newAssignmentModel);
+        void onItemClick(int position);
     }
 
     public void setOnItemClickListener(onItemClickListener listener){this.listener=listener;}

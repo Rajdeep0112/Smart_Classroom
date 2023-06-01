@@ -22,15 +22,15 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/teal_200"
                 android:titleTextColor="@color/black">
-                <Button
+                <ImageView
+                    android:id="@+id/account_profile"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
-                    android:foreground="@drawable/kratos"
                     android:background="@drawable/circle_boundary"
                     android:clipToOutline="true"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="centerCrop"/>
 
             </androidx.appcompat.widget.Toolbar>
             <androidx.recyclerview.widget.RecyclerView

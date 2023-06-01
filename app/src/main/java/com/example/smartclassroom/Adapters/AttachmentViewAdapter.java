@@ -3,21 +3,18 @@ package com.example.smartclassroom.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfRenderer;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.ParcelFileDescriptor;
-import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.aspose.words.Document;
-import com.aspose.words.License;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,20 +23,13 @@ import com.bumptech.glide.Glide;
 import com.example.smartclassroom.Models.UploadFileModel;
 import com.example.smartclassroom.R;
 //import com.github.barteksc.pdfviewer.PDFView;
-import com.github.barteksc.pdfviewer.PDFView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAdapter.AttachmentViewHolder>{
@@ -70,6 +60,14 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
 //        holder.doc_image.loadUrl(model.getUrl());
 //        holder.doc_image.setImageBitmap(image);
         holder.doc_name.setText(model.getName());
+
+//        holder.doc_image.setOnClickListener(view -> {
+//            Intent intent = new Intent(context, DocumentViewActivity.class);
+//            Bundle data = new Bundle();
+//            data.putSerializable("UploadModel",model);
+//            intent.putExtra("data",data);
+//            context.startActivity(intent);
+//        });
     }
 
     public static boolean isValidContextForGlide(final Context context) {
@@ -86,6 +84,7 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
     }
 
     private void image(String url,UploadFileModel model, AttachmentViewHolder holder){
+//        holder.progressBar.setVisibility(View.VISIBLE);
 //        AtomicReference<Bitmap> bitmap = new AtomicReference<>();
         StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(url);
 //        ref.getBytes(MAX_BYTES_DOC).addOnSuccessListener(bytes -> {
@@ -96,27 +95,38 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
 //            holder.doc_image.setImageBitmap(bitmap.get());
 //            holder.pdfView.fromBytes(bytes).pages(0).spacing(0).swipeHorizontal(false).enableSwipe(false).load();
 //            Log.e("context", bytes + "");
-            try {
-                File file = File.createTempFile(model.getName(),null,null);
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(bytes);
-                PdfRenderer renderer = new PdfRenderer(ParcelFileDescriptor.open(file,ParcelFileDescriptor.MODE_READ_ONLY));
-                Bitmap bitmap;
-                PdfRenderer.Page page = renderer.openPage(0);
-                int width = page.getWidth();
-                int height = page.getHeight();
-                bitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
-                page.render(bitmap,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-                holder.doc_image.setImageBitmap(bitmap);
+            ref.getMetadata().addOnSuccessListener(storageMetadata -> {
+                String type = storageMetadata.getContentType();
+                if(type.contains("pdf")){
+                    try {
+                        File file = File.createTempFile(model.getName(),null,null);
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(bytes);
+                        Bitmap bitmap;
+                        PdfRenderer renderer = new PdfRenderer(ParcelFileDescriptor.open(file,ParcelFileDescriptor.MODE_READ_ONLY));
+                        PdfRenderer.Page page = renderer.openPage(0);
+                        int width = page.getWidth();
+                        int height = page.getHeight();
+                        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                        page.render(bitmap,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+                        holder.doc_image.setImageBitmap(bitmap);
+                        Log.e(model.getName(), bytes.toString());
+//                if(holder.doc_image.getDrawable()!=null) holder.progressBar.setVisibility(View.GONE);
 //                Document document = new Document()
 //                context.getContentResolver().openInputStream()
-                fos.close();
-            } catch (IOException e) {
-                if (isValidContextForGlide(context)){
-                    Glide.with(context).load(model.getUrl()).into(holder.doc_image);
-                }
-            }
+                        fos.close();
+                    } catch (IOException e) {
 
+                    }
+                }
+                else{
+                    if (isValidContextForGlide(context)){
+                        Log.e(model.getName(), String.valueOf((holder.progressBar==null)));
+                        Glide.with(context).load(model.getUrl()).into(holder.doc_image);
+//                    if(holder.doc_image.getDrawable()!=null) holder.progressBar.setVisibility(View.GONE);
+                    }
+                }
+            });
         });
     }
 
@@ -132,6 +142,7 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
 //        private WebView doc_image;
         private TextView doc_name;
 //        private PDFView pdfView;
+        private ProgressBar progressBar;
 
         public AttachmentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -140,6 +151,7 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
             doc_name = itemView.findViewById(R.id.doc_name);
             doc_type = itemView.findViewById(R.id.doc_type);
 //            pdfView = itemView.findViewById(R.id.pdfView);
+//            progressBar = itemView.findViewById(R.id.progress_bar);
 
 //            doc_image.getSettings().setJavaScriptEnabled(true);
 //            doc_image.getSettings().setLoadWithOverviewMode(true);

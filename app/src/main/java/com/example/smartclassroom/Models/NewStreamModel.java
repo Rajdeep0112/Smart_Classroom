@@ -2,23 +2,25 @@ package com.example.smartclassroom.Models;
 
 import java.io.Serializable;
 
-public class NewNoticeModel implements Serializable {
-    String noticeId,noticeShare,classId,userName,timestamp,date,time;
-    long noOfAttachments;
+public class NewStreamModel implements Serializable {
+    String noticeId,noticeShare,classId,userId,userName,timestamp,date,time;
+    long noOfAttachments,noOfComments;
 
-    public NewNoticeModel(){
+    public NewStreamModel(){
 
     }
 
-    public NewNoticeModel(String noticeId, String noticeShare, String classId, String userName, String timestamp, String date, String time, int noOfAttachments) {
+    public NewStreamModel(String noticeId, String noticeShare, String classId, String  userId, String userName, String timestamp, String date, String time, long noOfAttachments, long noOfComments) {
         this.noticeId = noticeId;
         this.noticeShare = noticeShare;
         this.classId = classId;
+        this.userId = userId;
         this.userName = userName;
         this.timestamp = timestamp;
         this.date = date;
         this.time = time;
         this.noOfAttachments = noOfAttachments;
+        this.noOfComments = noOfComments;
     }
 
     public String getNoticeId() {
@@ -31,6 +33,10 @@ public class NewNoticeModel implements Serializable {
 
     public String getClassId() {
         return classId;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getUserName() {
@@ -65,6 +71,10 @@ public class NewNoticeModel implements Serializable {
         this.classId = classId;
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -84,18 +94,22 @@ public class NewNoticeModel implements Serializable {
     public void setNoOfAttachments(long noOfAttachments) {
         this.noOfAttachments = noOfAttachments;
     }
+    public void setNoOfComments(long noOfComments) {
+        this.noOfComments = noOfComments;
+    }
 
 
     // assignment view model
 
     String assignmentId,title,desc,dueDate,points,currentTimestamp;
-    long noOfComments;
 
-    public NewNoticeModel(String assignmentId, String title, String desc, String classId, String dueDate, String points, String timestamp, String date, String time, String currentTimestamp, long noOfAttachments, long noOfComments) {
+    public NewStreamModel(String assignmentId, String title, String desc, String classId, String userId, String userName, String dueDate, String points, String timestamp, String date, String time, String currentTimestamp, long noOfAttachments, long noOfComments) {
         this.assignmentId = assignmentId;
         this.title = title;
         this.desc = desc;
         this.classId = classId;
+        this.userId = userId;
+        this.userName = userName;
         this.dueDate = dueDate;
         this.points = points;
         this.timestamp = timestamp;
@@ -156,9 +170,5 @@ public class NewNoticeModel implements Serializable {
 
     public void setCurrentTimestamp(String currentTimestamp) {
         this.currentTimestamp = currentTimestamp;
-    }
-
-    public void setNoOfComments(long noOfComments) {
-        this.noOfComments = noOfComments;
     }
 }

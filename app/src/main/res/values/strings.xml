@@ -44,4 +44,7 @@
     <string name="NewHere">New here?</string>
     <string name="Register">Register</string>
     <string name="BeenHereBefore">Been here before</string>
+    <string name="Instructions">Instructions</string>
+    <string name="YourWork">Your Work</string>
+    <string name="StudentWork">Student Work</string>
 </resources>

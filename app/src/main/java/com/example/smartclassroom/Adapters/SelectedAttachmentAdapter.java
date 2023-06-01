@@ -28,7 +28,7 @@ public class SelectedAttachmentAdapter extends RecyclerView.Adapter<SelectedAtta
     @NonNull
     @Override
     public SelectedAttachmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.selected_aattachment_item_view,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.selected_attachment_item_view,parent,false);
         return new SelectedAttachmentViewHolder(view);
     }
 

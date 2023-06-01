@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,13 +17,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.smartclassroom.Adapters.AttachmentViewAdapter;
-import com.example.smartclassroom.Adapters.CommentViewAdapter;
 import com.example.smartclassroom.Models.CommentDetailsModel;
 import com.example.smartclassroom.Models.NewCommentModel;
-import com.example.smartclassroom.Models.NewNoticeModel;
+import com.example.smartclassroom.Models.NewStreamModel;
 import com.example.smartclassroom.Models.UploadFileModel;
 import com.example.smartclassroom.R;
 import com.google.firebase.database.ChildEventListener;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -45,9 +47,7 @@ public class NoticeActivity extends AppCompatActivity {
     private LinearLayout comment;
     private RecyclerView attachment_rv;
     private AttachmentViewAdapter adapter;
-    private NewNoticeModel model=new NewNoticeModel();
-    private ArrayList<NewNoticeModel> noticeList = new ArrayList<>();
-    private ArrayList<String> DocName = new ArrayList<>();
+    private NewStreamModel model=new NewStreamModel();
     private CommentDetailsModel detailsModel;
     private CollectionReference allStreams;
     private DatabaseReference reference, msgDetails, attachments;
@@ -66,6 +66,7 @@ public class NoticeActivity extends AppCompatActivity {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.home_toolbar_menu,menu);
         menu.removeItem(R.id.profile);
+        menu.removeItem(R.id.edit);
         return true;
     }
 
@@ -186,7 +187,7 @@ public class NoticeActivity extends AppCompatActivity {
     private void getData(){
         Intent intent=getIntent();
         Bundle data=intent.getBundleExtra("data");
-        model= (NewNoticeModel) data.getSerializable("Model");
+        model= (NewStreamModel) data.getSerializable("Model");
         detailsModel = (CommentDetailsModel) data.getSerializable("DetailsModel");
     }
 
@@ -199,6 +200,7 @@ public class NoticeActivity extends AppCompatActivity {
     }
 
     private void setData(){
+        setUserProfile(model.getUserId(),userProfile,this);
         userName.setText(model.getUserName());
         date.setText(model.getTime());
         noticeShare.setText(model.getNoticeShare());
@@ -210,8 +212,61 @@ public class NoticeActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new AttachmentViewAdapter.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(NoticeActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(NoticeActivity.this,DocumentViewActivity.class);
+                Bundle data = new Bundle();
+                data.putSerializable("UploadModel",uploadList.get(position));
+                intent.putExtra("data",data);
+                startActivity(intent);
             }
         });
+    }
+
+    public static boolean isValidContextForGlide(final Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            if (activity.isDestroyed() || activity.isFinishing()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void setUserProfile(String userId, ImageView imageView, Context context) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference();
+        DatabaseReference profile = reference.child("Profiles").child(userId);
+        profile.child("profileUrl").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    String url = snapshot.getValue().toString();
+                    setProfileImg(url, imageView, context);
+
+                } else {
+                    String url = "";
+                    setProfileImg(url, imageView, context);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void setProfileImg(String url, ImageView imageView, Context context) {
+        if (url.equals("")) {
+            imageView.setImageResource(R.drawable.default_profile);
+        } else {
+            if(context!=null) {
+                if (isValidContextForGlide(context)) {
+                    Glide.with(context).load(url).into(imageView);
+                }
+            }
+        }
     }
 }

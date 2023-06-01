@@ -81,25 +81,28 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    continueBtn.setVisibility(View.VISIBLE);
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    hashMap.put("userName", UserName);
-                    hashMap.put("email", Email);
-                    FirebaseFirestore.getInstance()
-                            .collection("Users")
-                            .document(auth.getUid())
-                            .set(hashMap)
-                            .addOnSuccessListener(runnable -> {
-                                Toast.makeText(RegisterActivity.this, "Data added to cloud", Toast.LENGTH_SHORT).show();
-                                Toast.makeText(RegisterActivity.this, "Your account has been created", Toast.LENGTH_SHORT).show();
-                                auth.signOut();
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                finish();
-                            }).addOnFailureListener(e -> {
-                                Toast.makeText(RegisterActivity.this, "Data not added. " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                auth.signOut();
-                            });
-                    progressBar.setVisibility(View.GONE);
+                    auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(runnable -> {
+                        Toast.makeText(RegisterActivity.this, "Email verification link sent to " + Email, Toast.LENGTH_LONG).show();
+                        continueBtn.setVisibility(View.VISIBLE);
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("userName", UserName);
+                        hashMap.put("email", Email);
+                        FirebaseFirestore.getInstance()
+                                .collection("Users")
+                                .document(auth.getUid())
+                                .set(hashMap)
+                                .addOnSuccessListener(runnable1 -> {
+                                    auth.signOut();
+                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                    finish();
+                                }).addOnFailureListener(e -> {
+                                    Toast.makeText(RegisterActivity.this, "Data not added. " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    auth.signOut();
+                                });
+                        progressBar.setVisibility(View.GONE);
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(RegisterActivity.this, "Email verification link not sent. " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
                 } else {
                     Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     continueBtn.setVisibility(View.VISIBLE);

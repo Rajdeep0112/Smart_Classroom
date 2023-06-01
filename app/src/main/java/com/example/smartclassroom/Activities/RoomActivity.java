@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.smartclassroom.Fragments.Room.ClassworkFragment;
 import com.example.smartclassroom.Fragments.Room.PeopleFragment;
@@ -21,7 +22,9 @@ import com.example.smartclassroom.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
@@ -47,6 +50,7 @@ public class RoomActivity extends AppCompatActivity{
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.home_toolbar_menu,menu);
         menu.removeItem(R.id.profile);
+        menu.removeItem(R.id.edit);
         return true;
     }
 
@@ -59,12 +63,8 @@ public class RoomActivity extends AppCompatActivity{
         setSupportActionBar(roomToolbar);
         roomToolbar.setNavigationOnClickListener(view -> roomDrawerLayout.openDrawer(GravityCompat.START));
         getData();
-        mainActivity.extractUser(roomNavigationView,user);
-        mainActivity.navigationViewMenu(roomNavigationView,classroomL);
-        mainActivity.navigationViewController(roomNavigationView,roomDrawerLayout,classroomL,this,auth);
+        extractUser();
 
-        replaceFragments(new StreamFragment());
-        bottomNavigationViewController();
     }
 
     private void initializations(){
@@ -125,5 +125,22 @@ public class RoomActivity extends AppCompatActivity{
         bundle.putString("Email",Email);
         bundle.putString("UserId",UserId);
         fragment.setArguments(bundle);
+    }
+
+    private void extractUser(){
+        user.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot snapshot = task.getResult();
+                UserId = auth.getCurrentUser().getUid();
+                UserName = snapshot.getString("userName");
+                Email = snapshot.getString("email");
+                mainActivity.extractUser(roomNavigationView,user,this);
+                mainActivity.navigationViewMenu(roomNavigationView,classroomL);
+                mainActivity.navigationViewController(roomNavigationView,roomDrawerLayout,classroomL,this,auth);
+
+                replaceFragments(new StreamFragment());
+                bottomNavigationViewController();
+            }
+        });
     }
 }

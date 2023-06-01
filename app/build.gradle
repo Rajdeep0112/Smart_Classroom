@@ -57,4 +57,9 @@ dependencies {
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 //    implementation 'com.apose:apose-words:20.6'
     implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
+
+//    jackson library
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
 }

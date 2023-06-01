@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stream_classwork_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/light_grey"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
@@ -40,7 +42,11 @@
                 android:layout_marginStart="21dp"
                 android:layout_marginTop="12dp"
                 android:text="New Assignment"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/black"
+                app:layout_constraintVertical_weight="1"
+                app:layout_constraintHorizontal_weight="1"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/stream_classwork_img"
@@ -53,7 +59,11 @@
                 android:layout_marginStart="21dp"
                 android:layout_marginTop="2dp"
                 android:text="01:12"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/grey"
+                app:layout_constraintVertical_weight="1"
+                app:layout_constraintHorizontal_weight="1"
                 android:textSize="15sp"
                 android:padding="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -74,11 +84,16 @@
                 tools:ignore="SpeakableTextPresentCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/divider2"
+<!--        <View-->
+<!--            android:id="@+id/divider2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:background="?android:attr/listDivider" />-->
+
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+            app:dividerColor="@color/light_grey"/>
 
         <TextView
             android:id="@+id/stream_classwork_comment"
@@ -93,4 +108,4 @@
             android:textSize="15sp" />
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

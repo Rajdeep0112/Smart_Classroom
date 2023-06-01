@@ -18,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.home_toolbar_menu,menu);
         menu.removeItem(R.id.profile);
+        menu.removeItem(R.id.edit);
         return true;
     }
 

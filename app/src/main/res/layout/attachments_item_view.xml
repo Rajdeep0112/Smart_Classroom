@@ -13,14 +13,29 @@
         android:layout_marginBottom="5dp"
         android:foreground="@drawable/boundary"
         app:cardCornerRadius="10dp">
+        
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/doc_image"
-            android:layout_width="150dp"
-            android:layout_height="100dp"
-            android:layout_margin="1dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/kratos" />
+            <ImageView
+                android:id="@+id/doc_image"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="1dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"/>
+
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progress_bar"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:indeterminateTint="@color/deep_blue" />-->
+        </RelativeLayout>
 
 <!--        <WebView-->
 <!--            android:id="@+id/doc_image"-->
@@ -53,12 +68,24 @@
         <TextView
             android:id="@+id/doc_name"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_marginStart="5dp"
+            android:layout_weight="1"
             android:text="Doc Name"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:gravity="center_vertical"
             android:textColor="@color/light_black"
             android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/close"
+            app:tint="@color/black"
+            android:visibility="gone"/>
 
 
     </LinearLayout>

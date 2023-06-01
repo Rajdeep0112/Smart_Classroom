@@ -23,18 +23,17 @@
                 android:id="@+id/classroomName"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:layout_gravity="start"
                 android:gravity="start"
                 android:padding="5dp"
                 android:text="@string/ClassName"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/white"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
-            <android.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/more_option"
@@ -50,12 +49,15 @@
 
         <TextView
             android:id="@+id/section"
-            android:layout_width="320dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_weight="1"
             android:layout_marginBottom="5dp"
             android:gravity="start|top"
             android:padding="5dp"
             android:text="@string/Section"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -66,11 +68,14 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="320dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="bottom"
             android:gravity="start"
             android:padding="5dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_weight="1"
             android:text="@string/Name"
             android:textColor="@color/white"
             android:textSize="15sp" />

@@ -75,8 +75,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                    finish();
+                    if (auth.getCurrentUser().isEmailVerified()) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                        auth.signOut();
+                        Toast.makeText(getApplicationContext(), "Email not verified", Toast.LENGTH_SHORT).show();
+                    }
                 }else {
                     Toast.makeText(LoginActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }

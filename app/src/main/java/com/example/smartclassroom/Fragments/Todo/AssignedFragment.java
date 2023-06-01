@@ -1,66 +1,84 @@
 package com.example.smartclassroom.Fragments.Todo;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.smartclassroom.Activities.CommentActivity;
+import com.example.smartclassroom.Activities.DocumentViewActivity;
+import com.example.smartclassroom.Adapters.AttachmentViewAdapter;
+import com.example.smartclassroom.Adapters.TodoViewAdapter;
+import com.example.smartclassroom.Classes.CommonFuncClass;
+import com.example.smartclassroom.Models.CommentDetailsModel;
+import com.example.smartclassroom.Models.NewClassroomModel;
+import com.example.smartclassroom.Models.NewStreamModel;
 import com.example.smartclassroom.R;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AssignedFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AssignedFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AssignedFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AssignedFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AssignedFragment newInstance(String param1, String param2) {
-        AssignedFragment fragment = new AssignedFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private View view;
+    private String tag;
+    private CommonFuncClass cfc;
+    private RecyclerView todoRv;
+    private TodoViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_assigned, container, false);
+        view = inflater.inflate(R.layout.fragment_assigned, container, false);
+        cfc = new CommonFuncClass(getContext());
+        getData();
+        initialisations();
+        setData();
+
+        todoRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new TodoViewAdapter();
+        todoRv.setAdapter(adapter);
+        adapterWork();
+        return view;
+    }
+
+    private void initialisations() {
+        todoRv = view.findViewById(R.id.todo_rv);
+//        database = FirebaseDatabase.getInstance();
+    }
+
+    private void getData() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            tag = bundle.getString("Tag");
+        }
+    }
+
+    private void sendDetails() {
+//        Intent intent = new Intent(getContext(), CommentActivity.class);
+//        Bundle data = new Bundle();
+//        data.putSerializable("DetailsModel", detailsModel);
+//        intent.putExtra("data", data);
+//        startActivity(intent);
+    }
+
+    private void setData() {
+//        cfc.toastShort(tag);
+    }
+
+    private void adapterWork() {
+        adapter.setTodo(tag, getContext());
+        adapter.setOnItemClickListener(new TodoViewAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+        });
     }
 }
