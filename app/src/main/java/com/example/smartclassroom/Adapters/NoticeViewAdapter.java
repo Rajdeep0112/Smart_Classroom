@@ -3,6 +3,7 @@ package com.example.smartclassroom.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +11,19 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.smartclassroom.Activities.CommentActivity;
 import com.example.smartclassroom.Activities.MainActivity;
 import com.example.smartclassroom.Classes.CommonFuncClass;
@@ -116,6 +123,7 @@ public class NoticeViewAdapter extends RecyclerView.Adapter<NoticeViewAdapter.No
         ImageView userProfile, attachImg, streamClassworkImg;
         CardView streamCard;
         LinearLayout attach;
+        ProgressBar progressBar;
 
         public NoticeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,6 +136,7 @@ public class NoticeViewAdapter extends RecyclerView.Adapter<NoticeViewAdapter.No
                 attachData = itemView.findViewById(R.id.noticeAttachText);
                 addComment = itemView.findViewById(R.id.noticeComment);
                 userProfile = itemView.findViewById(R.id.noticeProfile);
+                progressBar = itemView.findViewById(R.id.progress_bar);
                 attachImg = itemView.findViewById(R.id.noticeAttachImage);
                 streamCard = itemView.findViewById(R.id.noticeCardView);
                 attach = itemView.findViewById(R.id.noticeAttach);
@@ -208,10 +217,26 @@ public class NoticeViewAdapter extends RecyclerView.Adapter<NoticeViewAdapter.No
 
     public void setProfileImg(String url, NoticeViewHolder holder, Context context) {
         if (url.equals("")) {
+            holder.progressBar.setVisibility(View.GONE);
+            holder.userProfile.setBackground(context.getDrawable(R.drawable.circle_boundary));
             holder.userProfile.setImageResource(R.drawable.default_profile);
         } else {
             if (isValidContextForGlide(context)) {
-                Glide.with(context).load(url).into(holder.userProfile);
+                Glide.with(context).load(url)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.userProfile.setBackground(context.getDrawable(R.drawable.circle_no_boundary));
+                                return false;
+                            }
+                        }).into(holder.userProfile);
             }
         }
     }

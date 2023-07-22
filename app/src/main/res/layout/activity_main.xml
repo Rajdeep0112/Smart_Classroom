@@ -22,21 +22,47 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/teal_200"
                 android:titleTextColor="@color/black">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_layout"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="10dp">
                 <ImageView
                     android:id="@+id/account_profile"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/circle_boundary"
                     android:clipToOutline="true"
+                    android:layout_centerInParent="true"
                     android:scaleType="centerCrop"/>
 
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:indeterminateTint="@color/cream_blue" />
+
+                </RelativeLayout>
+
             </androidx.appcompat.widget.Toolbar>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rv_layout">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/main_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"/>
+                <ProgressBar
+                    android:id="@+id/progress_bar1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:indeterminateTint="@color/cream_blue" />
+            </RelativeLayout>
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -47,7 +73,7 @@
             android:layout_marginBottom="30dp"
             android:clickable="true"
             android:src="@drawable/add"
-            app:layout_anchor="@id/main_recycler_view"
+            app:layout_anchor="@id/rv_layout"
             app:layout_anchorGravity="bottom|right|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

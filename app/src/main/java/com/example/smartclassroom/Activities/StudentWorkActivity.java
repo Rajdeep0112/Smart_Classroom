@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,12 +20,17 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.smartclassroom.Adapters.AttachmentViewAdapter;
 import com.example.smartclassroom.Models.CommentDetailsModel;
 import com.example.smartclassroom.Models.NewPeopleModel;
@@ -52,6 +58,7 @@ public class StudentWorkActivity extends AppCompatActivity {
     private TextView studentNameTxt,statusTxt;
     private EditText marksEdTxt;
     private RecyclerView attachmentsRv;
+    private ProgressBar progressBar;
     private Button returnWorkBtn;
     private CommentDetailsModel detailsModel;
     private NewPeopleModel studentModel;
@@ -104,6 +111,7 @@ public class StudentWorkActivity extends AppCompatActivity {
         marksEdTxt = findViewById(R.id.marks);
         attachmentsRv = findViewById(R.id.attachments_rv);
         returnWorkBtn = findViewById(R.id.return_work);
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     private void firebaseInitializations(){
@@ -245,10 +253,26 @@ public class StudentWorkActivity extends AppCompatActivity {
 
     public void setProfileImg(String url) {
         if (url.equals("")) {
+            progressBar.setVisibility(View.GONE);
+            studentProfileImg.setBackground(getDrawable(R.drawable.circle_boundary));
             studentProfileImg.setImageResource(R.drawable.default_profile);
         } else {
             if (isValidContextForGlide(this)) {
-                Glide.with(this).load(url).into(studentProfileImg);
+                Glide.with(this).load(url)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                progressBar.setVisibility(View.GONE);
+                                studentProfileImg.setBackground(getDrawable(R.drawable.circle_no_boundary));
+                                return false;
+                            }
+                        }).into(studentProfileImg);
             }
         }
     }

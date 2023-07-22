@@ -12,18 +12,17 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/teal_200"
         android:titleTextColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/comment_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notice_toolbar"
-        app:layout_constraintBottom_toTopOf="@id/comment_layout">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notice_toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,22 +32,35 @@
                 android:id="@+id/notice_user_details_layout"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/notice_user_profile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/circle_boundary"
-                    android:clipToOutline="true"
+                <RelativeLayout
+                    android:id="@+id/profile_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.045"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/notice_user_profile"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerInParent="true"
+                        android:clipToOutline="true"
+                        android:scaleType="centerCrop" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:indeterminateTint="@color/cream_blue" />
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/notice_user_name"
@@ -56,12 +68,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
+                    android:padding="1dp"
                     android:text="@string/UserName"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:padding="1dp"
-                    app:layout_constraintStart_toEndOf="@+id/notice_user_profile"
+                    app:layout_constraintStart_toEndOf="@+id/profile_layout"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -70,11 +82,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="2dp"
+                    android:padding="1dp"
                     android:text="@string/DefaultDate"
                     android:textColor="@color/grey"
                     android:textSize="15sp"
-                    android:padding="1dp"
-                    app:layout_constraintStart_toEndOf="@+id/notice_user_profile"
+                    app:layout_constraintStart_toEndOf="@+id/profile_layout"
                     app:layout_constraintTop_toBottomOf="@+id/notice_user_name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -84,39 +96,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
+                android:padding="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notice_user_details_layout"
-                android:padding="5dp">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/notice_user_details_layout">
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    app:dividerColor="@color/black"/>
+                    app:dividerColor="@color/black" />
 
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:id="@+id/notice_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
                     android:padding="1dp"
                     android:text="@string/RandomData"
-                    android:textColor="@color/light_black"/>
+                    android:textColor="@color/light_black"
+                    android:textSize="15sp" />
 
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:id="@+id/notice_attachments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Attachments"
-                    android:textSize="15sp"
                     android:layout_margin="5dp"
+                    android:layout_marginTop="5dp"
                     android:padding="1dp"
+                    android:text="Attachments"
                     android:textColor="@color/black"
-                    android:visibility="gone"
-                    android:textStyle="bold"/>
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -124,10 +136,10 @@
                 android:id="@+id/notice_attachments_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notice_desc_layout"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/notice_desc_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -138,41 +150,41 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            app:dividerColor="@color/grey"/>
+            app:dividerColor="@color/grey" />
 
         <LinearLayout
             android:id="@+id/notice_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:layout_marginTop="5dp"
             android:clickable="true"
-            android:padding="5dp"
-            android:layout_marginTop="5dp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/comment"
                 android:layout_marginStart="15dp"
-                app:tint="@color/light_black"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:src="@drawable/comment"
+                app:tint="@color/light_black" />
 
             <TextView
                 android:id="@+id/notice_no_of_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="0 class comments"
                 android:textColor="@color/light_black"
-                android:layout_marginStart="10dp"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
         </LinearLayout>
 

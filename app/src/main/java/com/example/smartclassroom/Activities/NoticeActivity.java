@@ -10,15 +10,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.smartclassroom.Adapters.AttachmentViewAdapter;
 import com.example.smartclassroom.Models.CommentDetailsModel;
 import com.example.smartclassroom.Models.NewCommentModel;
@@ -46,6 +52,7 @@ public class NoticeActivity extends AppCompatActivity {
     private TextView userName,date,noticeShare,noOfComments,txtAttachments;
     private LinearLayout comment;
     private RecyclerView attachment_rv;
+    private ProgressBar progressBar;
     private AttachmentViewAdapter adapter;
     private NewStreamModel model=new NewStreamModel();
     private CommentDetailsModel detailsModel;
@@ -100,6 +107,7 @@ public class NoticeActivity extends AppCompatActivity {
         comment = findViewById(R.id.notice_comment);
         attachment_rv = findViewById(R.id.notice_attachments_recycler_view);
         txtAttachments = findViewById(R.id.notice_attachments);
+        progressBar = findViewById(R.id.progress_bar);
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
         msgDetails = reference.child("Messages").child(detailsModel.getClassId()).child(detailsModel.getId());
@@ -260,11 +268,27 @@ public class NoticeActivity extends AppCompatActivity {
 
     public void setProfileImg(String url, ImageView imageView, Context context) {
         if (url.equals("")) {
+            progressBar.setVisibility(View.GONE);
+            imageView.setBackground(context.getDrawable(R.drawable.circle_boundary));
             imageView.setImageResource(R.drawable.default_profile);
         } else {
             if(context!=null) {
                 if (isValidContextForGlide(context)) {
-                    Glide.with(context).load(url).into(imageView);
+                    Glide.with(context).load(url)
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.GONE);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.GONE);
+                                    imageView.setBackground(context.getDrawable(R.drawable.circle_no_boundary));
+                                    return false;
+                                }
+                            }).into(imageView);
                 }
             }
         }

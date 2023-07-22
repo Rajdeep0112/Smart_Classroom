@@ -17,9 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.smartclassroom.Models.UploadFileModel;
 import com.example.smartclassroom.R;
 //import com.github.barteksc.pdfviewer.PDFView;
@@ -109,6 +114,7 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
                         int height = page.getHeight();
                         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         page.render(bitmap,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+                        holder.progressBar.setVisibility(View.GONE);
                         holder.doc_image.setImageBitmap(bitmap);
                         Log.e(model.getName(), bytes.toString());
 //                if(holder.doc_image.getDrawable()!=null) holder.progressBar.setVisibility(View.GONE);
@@ -122,7 +128,21 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
                 else{
                     if (isValidContextForGlide(context)){
                         Log.e(model.getName(), String.valueOf((holder.progressBar==null)));
-                        Glide.with(context).load(model.getUrl()).into(holder.doc_image);
+                        Glide.with(context).load(model.getUrl())
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        holder.progressBar.setVisibility(View.GONE);
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        holder.progressBar.setVisibility(View.GONE);
+                                        return false;
+                                    }
+                                })
+                                .into(holder.doc_image);
 //                    if(holder.doc_image.getDrawable()!=null) holder.progressBar.setVisibility(View.GONE);
                     }
                 }
@@ -151,7 +171,7 @@ public class AttachmentViewAdapter extends RecyclerView.Adapter<AttachmentViewAd
             doc_name = itemView.findViewById(R.id.doc_name);
             doc_type = itemView.findViewById(R.id.doc_type);
 //            pdfView = itemView.findViewById(R.id.pdfView);
-//            progressBar = itemView.findViewById(R.id.progress_bar);
+            progressBar = itemView.findViewById(R.id.progress_bar);
 
 //            doc_image.getSettings().setJavaScriptEnabled(true);
 //            doc_image.getSettings().setLoadWithOverviewMode(true);

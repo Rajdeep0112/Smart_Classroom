@@ -27,14 +27,15 @@
                 android:layout_marginEnd="1dp"
                 android:layout_marginBottom="1dp"
                 android:adjustViewBounds="true"
+                android:layout_centerInParent="true"
                 android:scaleType="centerCrop"/>
 
-<!--            <ProgressBar-->
-<!--                android:id="@+id/progress_bar"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_centerInParent="true"-->
-<!--                android:indeterminateTint="@color/deep_blue" />-->
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="@color/cream_blue" />
         </RelativeLayout>
 
 <!--        <WebView-->

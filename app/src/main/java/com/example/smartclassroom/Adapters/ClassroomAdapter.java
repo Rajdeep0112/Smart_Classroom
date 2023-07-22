@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,12 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
     private ArrayList<NewClassroomModel> modelList= new ArrayList<>();
     private Context context;
     private onItemClickListener listener;
+    private ProgressBar progressBar;
 
-    public void setClasses(ArrayList<NewClassroomModel> modelList,Context context){
+    public void setClasses(ArrayList<NewClassroomModel> modelList, ProgressBar progressBar, Context context){
         this.modelList=modelList;
         this.context=context;
+        this.progressBar = progressBar;
         notifyDataSetChanged();
     }
 
@@ -36,6 +39,9 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
 
     @Override
     public void onBindViewHolder(@NonNull ClassroomViewHolder holder, int position) {
+        if(modelList.size()-1==position){
+            progressBar.setVisibility(View.GONE);
+        }
         NewClassroomModel model=modelList.get(position);
         holder.classroomName.setText(model.getClassroomName());
         holder.section.setText(model.getSection());

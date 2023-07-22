@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -24,10 +25,15 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.smartclassroom.Adapters.ClassroomAdapter;
 import com.example.smartclassroom.Classes.CommonFuncClass;
 import com.example.smartclassroom.Classes.addClassAlert;
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
     private DrawerLayout mainDrawerLayout;
     private Toolbar mainToolbar;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar,progressBar1;
     private FloatingActionButton fab;
     private ArrayList<NewClassroomModel> classroomList=new ArrayList<>(),allClassroomList=new ArrayList<>();
     private ArrayList<String> sc=new ArrayList<>();
@@ -135,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
         recyclerView=findViewById(R.id.main_recycler_view);
         moreOption=findViewById(R.id.more_option);
         accountProfile = findViewById(R.id.account_profile);
+        progressBar = findViewById(R.id.progress_bar);
+        progressBar1 = findViewById(R.id.progress_bar1);
         auth=FirebaseAuth.getInstance();
         UserID=auth.getCurrentUser().getUid();
         user= FirebaseFirestore.getInstance().collection("Users").document(UserID);
@@ -143,7 +152,8 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
     }
 
     private void adapterWork(ClassroomAdapter adapter){
-        adapter.setClasses(classroomList,MainActivity.this);
+        progressBar1.setVisibility(View.VISIBLE);
+        adapter.setClasses(classroomList,progressBar1,MainActivity.this);
         adapter.setOnItemClickListener(new ClassroomAdapter.onItemClickListener() {
             @Override
             public void onItemClick(NewClassroomModel classroomModel) {
@@ -224,12 +234,12 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
                         if(snapshot.getValue()!=null) {
                             url[0] = snapshot.getValue().toString();
                             getHeaderView(navigationView,UserName,Email,url[0],context);
-                            if(context==MainActivity.this) setProfileImg(url[0],accountProfile,context);
+                            if(context==MainActivity.this) setProfileImg(url[0],accountProfile,progressBar,context);
 
                         }else {
                             url[0] = "";
                             getHeaderView(navigationView,UserName,Email,url[0],context);
-                            if(context==MainActivity.this) setProfileImg(url[0],accountProfile,context);
+                            if(context==MainActivity.this) setProfileImg(url[0],accountProfile,progressBar,context);
                         }
                     }
 
@@ -242,13 +252,29 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
         });
     }
 
-    public void setProfileImg(String url, ImageView imageView,Context context){
+    public void setProfileImg(String url, ImageView imageView, ProgressBar progressBar,Context context){
         if(url.equals("")){
+            progressBar.setVisibility(View.GONE);
+            imageView.setBackground(context.getDrawable(R.drawable.circle_boundary));
             imageView.setImageResource(R.drawable.default_profile);
         }else {
             if(context!=null) {
                 if (isValidContextForGlide(context)) {
-                    Glide.with(context).load(url).into(imageView);
+                    Glide.with(context).load(url)
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.GONE);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.GONE);
+                                    imageView.setBackground(context.getDrawable(R.drawable.circle_no_boundary));
+                                    return false;
+                                }
+                            }).into(imageView);
                 }
             }
         }
@@ -275,8 +301,13 @@ public class MainActivity extends AppCompatActivity implements addClassAlert.dia
         ImageView profile = view.findViewById(R.id.user_profile);
         TextView userName = view.findViewById(R.id.user_name);
         TextView email = view.findViewById(R.id.user_email);
-        setProfileImg(url,profile,context);
+        ProgressBar progressBar = view.findViewById(R.id.progress_bar);
+        ProgressBar progressBar1 = view.findViewById(R.id.progress_bar1);
+        ProgressBar progressBar2 = view.findViewById(R.id.progress_bar2);
+        setProfileImg(url,profile,progressBar,context);
+        progressBar1.setVisibility(View.GONE);
         userName.setText(UserName);
+        progressBar2.setVisibility(View.GONE);
         email.setText(Email);
         profile.setOnClickListener(view1 -> {
             context.startActivity(new Intent(context,ProfileImageActivity.class));

@@ -4,19 +4,26 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.smartclassroom.Activities.StudentWorkActivity;
 import com.example.smartclassroom.Classes.CommonFuncClass;
 import com.example.smartclassroom.Models.CommentDetailsModel;
@@ -88,6 +95,7 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
         private ImageView studentProfileImg;
         private TextView studentUserNameTxt,submitStatusTxt,returnMarksTxt,draftMarksTxt,submitStatusDescTxt;
         private CardView studentWorkCard;
+        private ProgressBar progressBar;
 
         public StudentWorkViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,6 +107,7 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
             draftMarksTxt = itemView.findViewById(R.id.draft_marks);
             submitStatusDescTxt = itemView.findViewById(R.id.submit_status_desc);
             studentWorkCard = itemView.findViewById(R.id.student_work_card);
+            progressBar = itemView.findViewById(R.id.progress_bar);
 
             itemView.setOnClickListener(view -> {
                 int position=getAdapterPosition();
@@ -154,10 +163,26 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
 
     public void setProfileImg(String url, StudentWorkViewHolder holder, Context context) {
         if (url.equals("")) {
+            holder.progressBar.setVisibility(View.GONE);
+            holder.studentProfileImg.setBackground(context.getDrawable(R.drawable.circle_boundary));
             holder.studentProfileImg.setImageResource(R.drawable.default_profile);
         } else {
             if (isValidContextForGlide(context)) {
-                Glide.with(context).load(url).into(holder.studentProfileImg);
+                Glide.with(context).load(url)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                holder.studentProfileImg.setBackground(context.getDrawable(R.drawable.circle_no_boundary));
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.studentProfileImg.setBackground(context.getDrawable(R.drawable.circle_no_boundary));
+                                return false;
+                            }
+                        }).into(holder.studentProfileImg);
             }
         }
     }
