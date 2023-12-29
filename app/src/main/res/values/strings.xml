@@ -38,7 +38,7 @@
     <string name="Login">Login</string>
     <string name="EmailAddress">Email Address</string>
     <string name="Password">Password</string>
-    <string name="ForgotPassword">Forgot Password</string>
+    <string name="ForgotPassword"><u>Forgot Password</u></string>
     <string name="Continue">CONTINUE</string>
     <string name="Or">or</string>
     <string name="NewHere">New here?</string>

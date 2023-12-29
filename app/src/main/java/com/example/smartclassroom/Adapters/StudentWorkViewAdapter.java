@@ -237,18 +237,18 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
                             int val = currentTimestamp.compareTo(due);
                             if (val <= 0) {
                                 if (returnStatus.equals("true")) {
-                                    cfc.toastShort("1u1");
+//                                    cfc.toastShort("1u1");
                                     setLayout(holder, "Assigned", returnMarks + "/" + total, draftMarks + "/" + total, "Not handed in", greyColor, greenColor, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);
                                 } else {
-                                    cfc.toastShort("11u1");
+//                                    cfc.toastShort("11u1");
                                     setLayout(holder, "Assigned", returnMarks + "/" + total, draftMarks + "/" + total, "Not handed in", greyColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                 }
                             } else {
                                 if (returnStatus.equals("true")) {
-                                    cfc.toastShort("2u2");
+//                                    cfc.toastShort("2u2");
                                     setLayout(holder, "Missing", returnMarks + "/" + total, draftMarks + "/" + total, "Not handed in", redColor, greenColor, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);
                                 } else {
-                                    cfc.toastShort("22u2");
+//                                    cfc.toastShort("22u2");
                                     setLayout(holder, "Missing", returnMarks + "/" + total, draftMarks + "/" + total, "Not handed in", redColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                 }
                             }
@@ -258,14 +258,14 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
                             if (due != null) {
                                 int val = timestamp.compareTo(due);
                                 if (val <= 0) {
-                                    cfc.toastShort("h1");
+//                                    cfc.toastShort("h1");
                                     setLayout(holder, "Handed in", returnMarks, draftMarks, "", greenColor, greenColor, View.VISIBLE, View.GONE, View.GONE, View.GONE);
                                 } else {
-                                    cfc.toastShort("h2");
+//                                    cfc.toastShort("h2");
                                     setLayout(holder, "Handed in", returnMarks, draftMarks, "Done late", greenColor, greenColor, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE);
                                 }
                             } else {
-                                cfc.toastShort("h3");
+//                                cfc.toastShort("h3");
                                 setLayout(holder, "Handed in", returnMarks, draftMarks, "", greenColor, greenColor, View.VISIBLE, View.GONE, View.GONE, View.GONE);
                             }
                         } else if (submitStatus.equals("unsubmit")) {
@@ -274,27 +274,27 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
                                     int val = timestamp.compareTo(due);
                                     if (val <= 0) {
                                         if (returnStatus.equals("true")) {
-                                            cfc.toastShort("1u");
+//                                            cfc.toastShort("1u");
                                             setLayout(holder, "Assigned", returnMarks + "/" + total, draftMarks + "/" + total, "", greyColor, greenColor, View.GONE, View.VISIBLE, View.GONE, View.GONE);
                                         } else {
-                                            cfc.toastShort("11u");
+//                                            cfc.toastShort("11u");
                                             setLayout(holder, "Assigned", returnMarks + "/" + total, draftMarks + "/" + total, "", greyColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                         }
                                     } else {
                                         if (returnStatus.equals("true")) {
-                                            cfc.toastShort("2u");
+//                                            cfc.toastShort("2u");
                                             setLayout(holder, "Missing", returnMarks + "/" + total, draftMarks + "/" + total, "Done late", redColor, greenColor, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);
                                         } else {
-                                            cfc.toastShort("22u");
+//                                            cfc.toastShort("22u");
                                             setLayout(holder, "Missing", returnMarks + "/" + total, draftMarks + "/" + total, "Done late", redColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                         }
                                     }
                                 } else {
                                     if (returnStatus.equals("true")) {
-                                        cfc.toastShort("3u");
+//                                        cfc.toastShort("3u");
                                         setLayout(holder, "", returnMarks + "/" + total, draftMarks + "/" + total, "", greyColor, greenColor, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);
                                     } else {
-                                        cfc.toastShort("33u");
+//                                        cfc.toastShort("33u");
                                         setLayout(holder, "", returnMarks + "/" + total, draftMarks + "/" + total, "", greyColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.VISIBLE);
                                     }
                                 }
@@ -302,14 +302,14 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
                                 if (due != null) {
                                     int val = timestamp.compareTo(due);
                                     if (val <= 0) {
-                                        cfc.toastShort("u1");
+//                                        cfc.toastShort("u1");
                                         setLayout(holder, "Assigned", returnMarks, draftMarks, "", greyColor, greenColor, View.VISIBLE, View.GONE, View.GONE, View.GONE);
                                     } else {
-                                        cfc.toastShort("u2");
+//                                        cfc.toastShort("u2");
                                         setLayout(holder, "Missing", returnMarks, draftMarks, "", redColor, greenColor, View.VISIBLE, View.GONE, View.GONE, View.GONE);
                                     }
                                 } else {
-                                    cfc.toastShort("u3");
+//                                    cfc.toastShort("u3");
                                     setLayout(holder, "Assigned", returnMarks, draftMarks, "", greyColor, greenColor, View.VISIBLE, View.GONE, View.GONE, View.GONE);
                                 }
                             }
@@ -319,27 +319,27 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
                                 int reVal = returnTimestamp.compareTo(due);
                                 if (reVal <= 0) {
                                     if (returnStatus.equals("true")) {
-                                        cfc.toastShort("r1");
+//                                        cfc.toastShort("r1");
                                         setLayout(holder, "Handed in", returnMarks + "/" + total, draftMarks + "/" + total, "", greenColor, greenColor, View.GONE, View.VISIBLE, View.GONE, View.GONE);
                                     } else {
-                                        cfc.toastShort("r11");
+//                                        cfc.toastShort("r11");
                                         setLayout(holder, "Handed in", returnMarks + "/" + total, draftMarks + "/" + total, "", greenColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                     }
                                 } else {
                                     if (returnStatus.equals("true")) {
-                                        cfc.toastShort("r2");
+//                                        cfc.toastShort("r2");
                                         setLayout(holder, "Handed in", returnMarks + "/" + total, draftMarks + "/" + total, "Done late", greenColor, greenColor, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE);
                                     } else {
-                                        cfc.toastShort("r22");
+//                                        cfc.toastShort("r22");
                                         setLayout(holder, "Handed in", returnMarks + "/" + total, draftMarks + "/" + total, "Done late", greenColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                     }
                                 }
                             } else {
                                 if (returnStatus.equals("true")) {
-                                    cfc.toastShort("r3");
+//                                    cfc.toastShort("r3");
                                     setLayout(holder, "Handed in", returnMarks + "/" + total, draftMarks + "/" + total, "", greenColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                 } else {
-                                    cfc.toastShort("r33");
+//                                    cfc.toastShort("r33");
                                     setLayout(holder, "Handed in", returnMarks + "/" + total, draftMarks + "/" + total, "", greenColor, greenColor, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE);
                                 }
                             }
@@ -351,14 +351,14 @@ public class StudentWorkViewAdapter extends RecyclerView.Adapter<StudentWorkView
                         String timestamp = getTimestamp();
                         int val = timestamp.compareTo(due);
                         if (val <= 0) {
-                            cfc.toastShort("1");
+//                            cfc.toastShort("1");
                             setLayout(holder, "Assigned", "null", "null", "", greyColor, greenColor,View.VISIBLE, View.GONE, View.GONE, View.GONE);
                         } else {
-                            cfc.toastShort("2");
+//                            cfc.toastShort("2");
                             setLayout(holder, "Missing", "null", "null", "", redColor, greenColor,View.VISIBLE, View.GONE, View.GONE, View.GONE);
                         }
                     } else {
-                        cfc.toastShort("3");
+//                        cfc.toastShort("3");
                         setLayout(holder, "Assigned", "null", "null", "", greyColor, greenColor,View.VISIBLE, View.GONE, View.GONE, View.GONE);
                     }
                 }

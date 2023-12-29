@@ -60,7 +60,7 @@ public class ClassworkViewAdapter extends RecyclerView.Adapter<ClassworkViewAdap
         public ClassworkViewHolder(@NonNull View itemView) {
             super(itemView);
             assignmentImg=itemView.findViewById(R.id.classwork_assignment_img);
-            moreOptions=itemView.findViewById(R.id.classwork_more_option);
+//            moreOptions=itemView.findViewById(R.id.classwork_more_option);
             title=itemView.findViewById(R.id.classwork_assignment_title);
             time=itemView.findViewById(R.id.classwork_assignment_time);
             cardView=itemView.findViewById(R.id.classwork_card_view);

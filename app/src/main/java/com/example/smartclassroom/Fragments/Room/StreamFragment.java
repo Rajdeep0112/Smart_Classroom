@@ -68,7 +68,7 @@ import java.util.Locale;
 public class StreamFragment extends Fragment {
 
     private String NoticeId;
-    private TextView className, section;
+    private TextView className, section, code;
     private CardView addNotice;
     private ImageButton noticeMore;
     private ImageView profileImg;
@@ -114,6 +114,8 @@ public class StreamFragment extends Fragment {
 
         className.setText(classroomModel.getClassroomName());
         section.setText(classroomModel.getSection());
+        String rCode = classroomModel.getClassId().substring(0, 7) + classroomModel.getClassId().substring(17);
+        code.setText("Class code : "+rCode);
         setUserProfile(UserID,profileImg,getContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -136,7 +138,8 @@ public class StreamFragment extends Fragment {
         className = view.findViewById(R.id.room_name);
         section = view.findViewById(R.id.room_section);
         addNotice = view.findViewById(R.id.addNotices);
-        noticeMore = view.findViewById(R.id.noticeMore);
+//        noticeMore = view.findViewById(R.id.noticeMore);
+        code = view.findViewById(R.id.room_code);
         recyclerView = view.findViewById(R.id.noticeView);
         addNotice = view.findViewById(R.id.addNotices);
         profileImg =view.findViewById(R.id.shareImageView);

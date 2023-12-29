@@ -64,17 +64,17 @@
             app:layout_constraintStart_toEndOf="@+id/classwork_assignment_img"
             app:layout_constraintTop_toBottomOf="@+id/classwork_assignment_title" />
 
-        <ImageButton
-            android:id="@+id/classwork_more_option"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="2dp"
-            android:background="@null"
-            android:src="@drawable/more_vert"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black"
-            tools:ignore="SpeakableTextPresentCheck" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/classwork_more_option"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_margin="2dp"-->
+<!--            android:background="@null"-->
+<!--            android:src="@drawable/more_vert"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:tint="@color/black"-->
+<!--            tools:ignore="SpeakableTextPresentCheck" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

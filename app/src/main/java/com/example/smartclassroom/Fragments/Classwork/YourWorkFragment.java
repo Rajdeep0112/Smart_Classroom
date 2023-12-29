@@ -331,14 +331,14 @@ public class YourWorkFragment extends Fragment {
                             String currentTimestamp = getTimestamp();
                             int val = currentTimestamp.compareTo(due);
                             if (val <= 0) {
-                                Toast.makeText(getContext(), "1u1", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getContext(), "1u1", Toast.LENGTH_SHORT).show();
                                 setLayout(View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, View.VISIBLE, returnMarks + "/" + total, "","Not handed in", "Resubmit", greyColor, true, true);
                             } else {
-                                Toast.makeText(getContext(), "2u2", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getContext(), "2u2", Toast.LENGTH_SHORT).show();
                                 setLayout(View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, View.VISIBLE, returnMarks + "/" + total, "","Not handed in", "Resubmit", greyColor, true, true);
                             }
                         } else {
-                            Toast.makeText(getContext(), "3u3", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "3u3", Toast.LENGTH_SHORT).show();
                             setLayout(View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, View.VISIBLE, returnMarks + "/" + total, "","Not handed in", "Resubmit", greyColor, true, true);
                         }
 
@@ -347,14 +347,14 @@ public class YourWorkFragment extends Fragment {
                             if (due != null) {
                                 int val = timestamp.compareTo(due);
                                 if (val <= 0) {
-                                    Toast.makeText(getContext(), "h1", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "h1", Toast.LENGTH_SHORT).show();
                                     setLayout(View.GONE, View.GONE, View.VISIBLE, View.GONE, View.GONE, "0/" + total, "Handed in", "","Unsubmit", greyColor, false, true);
                                 } else {
-                                    Toast.makeText(getContext(), "h2", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "h2", Toast.LENGTH_SHORT).show();
                                     setLayout(View.GONE, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE, "0/" + total, "Handed in", "Done late","Unsubmit", greyColor, false, true);
                                 }
                             } else {
-                                Toast.makeText(getContext(), "h3", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getContext(), "h3", Toast.LENGTH_SHORT).show();
                                 setLayout(View.GONE, View.GONE, View.VISIBLE, View.GONE, View.GONE, "0/" + total, "Handed in", "","Unsubmit", greyColor, false, true);
                             }
                         } else if (submitStatus.equals("unsubmit")) {
@@ -363,28 +363,28 @@ public class YourWorkFragment extends Fragment {
                                 if (due != null) {
                                     int val = timestamp.compareTo(due);
                                     if (val <= 0) {
-                                        Toast.makeText(getContext(), "1u", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getContext(), "1u", Toast.LENGTH_SHORT).show();
                                         setLayout(View.GONE, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE, returnMarks + "/" + total, "", "","Resubmit", greyColor, true, true);
                                     } else {
-                                        Toast.makeText(getContext(), "2u", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getContext(), "2u", Toast.LENGTH_SHORT).show();
                                         setLayout(View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, View.VISIBLE, returnMarks + "/" + total, "", "Done late","Resubmit", greyColor, true, true);
                                     }
                                 } else {
-                                    Toast.makeText(getContext(), "3u", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "3u", Toast.LENGTH_SHORT).show();
                                     setLayout(View.GONE, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE, returnMarks + "/" + total, "", "","Resubmit", greyColor, true, true);
                                 }
                             } else {
                                 if (due != null) {
                                     int val = timestamp.compareTo(due);
                                     if (val <= 0) {
-                                        Toast.makeText(getContext(), "u1", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getContext(), "u1", Toast.LENGTH_SHORT).show();
                                         setLayout(View.VISIBLE, View.GONE, View.GONE, View.GONE, View.VISIBLE, "0/" + total, "", "","Hand in", greyColor, true, true);
                                     } else {
-                                        Toast.makeText(getContext(), "u2", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getContext(), "u2", Toast.LENGTH_SHORT).show();
                                         setLayout(View.GONE, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, "0/" + total, "Missing","Done late", "Hand in", redColor, true, true);
                                     }
                                 } else {
-                                    Toast.makeText(getContext(), "u3", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "u3", Toast.LENGTH_SHORT).show();
                                     setLayout(View.VISIBLE, View.GONE, View.GONE, View.GONE, View.VISIBLE, "0/" + total, "", "","Hand in", greyColor, true, true);
                                 }
                             }
@@ -393,14 +393,14 @@ public class YourWorkFragment extends Fragment {
                             if (due != null) {
                                 int reVal = returnTimestamp.compareTo(due);
                                 if (reVal <= 0) {
-                                    Toast.makeText(getContext(), "r1", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "r1", Toast.LENGTH_SHORT).show();
                                     setLayout(View.GONE, View.VISIBLE, View.GONE, View.GONE, View.GONE, returnMarks + "/" + total, "Handed in", "","Unsubmit", greyColor, false, true);
                                 } else {
-                                    Toast.makeText(getContext(), "r2", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "r2", Toast.LENGTH_SHORT).show();
                                     setLayout(View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, View.GONE, returnMarks + "/" + total, "Handed in", "Done late","Unsubmit", greyColor, false, true);
                                 }
                             } else {
-                                Toast.makeText(getContext(), "r3", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getContext(), "r3", Toast.LENGTH_SHORT).show();
                                 setLayout(View.GONE, View.VISIBLE, View.GONE, View.GONE, View.GONE, returnMarks + "/" + total, "Handed in", "","Unsubmit", greyColor, false, true);
                             }
                         }
@@ -411,14 +411,14 @@ public class YourWorkFragment extends Fragment {
                         String timestamp = getTimestamp();
                         int val = timestamp.compareTo(due);
                         if (val <= 0) {
-                            Toast.makeText(getContext(), "1", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "1", Toast.LENGTH_SHORT).show();
                             setLayout(View.VISIBLE, View.GONE, View.GONE, View.GONE, View.VISIBLE, "0/" + total, "", "","Hand in", greyColor, true, true);
                         } else {
-                            Toast.makeText(getContext(), "2", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "2", Toast.LENGTH_SHORT).show();
                             setLayout(View.VISIBLE, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, "0/" + total, "Missing", "Done late","Hand in", redColor, true, true);
                         }
                     } else {
-                        Toast.makeText(getContext(), "3", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "3", Toast.LENGTH_SHORT).show();
                         setLayout(View.VISIBLE, View.GONE, View.GONE, View.GONE, View.VISIBLE, "0/" + total, "", "","Hand in", greyColor, true, true);
                     }
                 }

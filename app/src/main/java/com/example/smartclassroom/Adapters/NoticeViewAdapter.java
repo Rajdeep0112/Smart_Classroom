@@ -129,7 +129,7 @@ public class NoticeViewAdapter extends RecyclerView.Adapter<NoticeViewAdapter.No
             super(itemView);
 
             if (Status == 1) {
-                moreVer = itemView.findViewById(R.id.noticeMore);
+//                moreVer = itemView.findViewById(R.id.noticeMore);
                 userName = itemView.findViewById(R.id.noticeUserName);
                 date = itemView.findViewById(R.id.noticeDate);
                 desc = itemView.findViewById(R.id.noticeDesc);
@@ -146,7 +146,7 @@ public class NoticeViewAdapter extends RecyclerView.Adapter<NoticeViewAdapter.No
                 streamClassworkImg = itemView.findViewById(R.id.stream_classwork_img);
                 addComment = itemView.findViewById(R.id.stream_classwork_comment);
                 streamCard = itemView.findViewById(R.id.stream_classwork_card_view);
-                moreVer = itemView.findViewById(R.id.stream_classwork_more_option);
+//                moreVer = itemView.findViewById(R.id.stream_classwork_more_option);
             }
 
             itemView.setOnClickListener(view -> {

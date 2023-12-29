@@ -35,16 +35,16 @@
                 android:textStyle="bold" />
 
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/more_option"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="end"
-                android:background="@null"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:src="@drawable/more_vert"
-                android:tint="@color/white" />
+<!--            <androidx.appcompat.widget.AppCompatImageButton-->
+<!--                android:id="@+id/more_option"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:background="@null"-->
+<!--                android:minWidth="48dp"-->
+<!--                android:minHeight="48dp"-->
+<!--                android:src="@drawable/more_vert"-->
+<!--                android:tint="@color/white" />-->
         </LinearLayout>
 
         <TextView

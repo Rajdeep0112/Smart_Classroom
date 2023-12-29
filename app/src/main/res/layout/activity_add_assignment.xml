@@ -42,6 +42,7 @@
                 android:layout_margin="10dp"
                 android:hint="Description"
                 android:inputType="textMultiLine"
+                android:maxLines="2"
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:textSize="20sp" />

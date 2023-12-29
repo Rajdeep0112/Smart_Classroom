@@ -59,8 +59,26 @@
                         android:textColor="@color/white"
                         android:textSize="25sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/room_section"
+                        app:layout_constraintBottom_toTopOf="@+id/room_code"
                         app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/room_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_margin="5dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="start"
+                        android:textIsSelectable="true"
+                        android:padding="5dp"
+                        android:text="Class code : "
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/room_section"
+                        app:layout_constraintStart_toStartOf="parent" />
+
 
                     <TextView
                         android:id="@+id/room_section"
